@@ -1,4 +1,7 @@
 package org.example.usermanagement.repositories;
 
-public interface UserRepository extends org.springframework.data.jpa.repository.JpaRepository<org.example.usermanagement.data.User, java.lang.Integer> {
+import org.example.usermanagement.data.User;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface UserRepository extends JpaRepository<User, Integer> {
 }
