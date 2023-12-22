@@ -1,2 +1,11 @@
-{
-    }
+spring:
+  datasource:
+    username: root
+    password: KatuXa2281
+    url: jdbc:mysql://localhost:3306/user
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
