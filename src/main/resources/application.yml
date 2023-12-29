@@ -1,14 +1,12 @@
 spring:
   datasource:
-    username: root
-    password: KatuXa2281
-    url: jdbc:mysql://localhost:3306/user
-
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    password: ${MYSQL_PASSWORD:KatuXa2281}
+    url: jdbc:mysql://${MYSQL_HOST:localhost}:${MYSQL_PORT:3306}/${MYSQL_DB_NAME:user}
+    username: ${MYSQL_USER:root}
   jpa:
     hibernate:
       ddl-auto: update
-      naming:
-        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
-logging:
-  level:
-    org.springframework.security.web: debug
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect

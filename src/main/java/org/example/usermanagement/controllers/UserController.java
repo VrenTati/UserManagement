@@ -4,9 +4,8 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.example.usermanagement.data.User;
+import org.example.usermanagement.exeption.UserNotFoundException;
 import org.example.usermanagement.services.UserService;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,21 +16,19 @@ import java.util.Optional;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class UserController {
     UserService userService;
+
     @GetMapping("/all_users")
     public List<User> showUsers() {
         return userService.getAllUsers();
     }
 
     @GetMapping("/user/{id}")
-    public ResponseEntity<String> showUser(@PathVariable int id) {
-        try {
-            Optional<User> user = userService.getUserById(id);
-            return user.map(value -> ResponseEntity.ok(value.toString())).orElseGet(() ->
-                    ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("User not found with id: " + id));
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("An error occurred while processing the request.");
+    public String showUser(@PathVariable int id) {
+        Optional<User> user = userService.getUserById(id);
+        if (user.isPresent()) {
+            return user.get().toString();
+        } else {
+            return new UserNotFoundException("User with id: " + id + " did`nt found").toString();
         }
     }
 
@@ -40,9 +37,23 @@ public class UserController {
                           @RequestParam String lastname,
                           @RequestParam String login,
                           @RequestParam String password,
-                          @RequestParam int age){
+                          @RequestParam int age) {
         System.out.println("Received request to add user");
         User newUser = userService.addUser(name, lastname, age, login, password);
         return newUser.toString();
+    }
+
+    @DeleteMapping("/delete_user/{id}")
+    public String deleteUser(@PathVariable int id) {
+        return userService.deleteUser(id).toString();
+    }
+
+    @PutMapping("/change_user/{id}")
+    public String changeUser(@PathVariable int id,
+                             /*@RequestParam String login,
+                             @RequestParam String password*/
+    @RequestParam User user) {
+
+        return userService.changeUser(id, user);
     }
 }

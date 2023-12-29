@@ -2,10 +2,8 @@ package org.example.usermanagement.services;
 
 import lombok.AllArgsConstructor;
 import org.example.usermanagement.data.User;
+import org.example.usermanagement.exeption.UserNotFoundException;
 import org.example.usermanagement.repositories.UserRepository;
-//import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.bcrypt.BCrypt;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -26,17 +24,53 @@ public class UserService {
     }
 
     public User addUser(String name, String lastname, int age, String login, String password) {
-        String salt = BCrypt.gensalt();
-        String hashedPassword = BCrypt.hashpw(password, salt);
+        /*String salt = BCrypt.gensalt();
+        String hashedPassword = BCrypt.hashpw(password, salt);*/
 
         User user = User.builder().name(name)
                 .lastname(lastname)
                 .age(age)
                 .login(login)
-                .password(hashedPassword)
+                .password(password)
                 .build();
         userRepository.save(user);
         return user;
+    }
+
+    public User deleteUser(int id){
+        Optional<User> userOptional = userRepository.findById(id);
+        if (userOptional.isPresent()){
+            userOptional.get().setDelete(true);
+            return userOptional.get();
+        } else {
+            throw new UserNotFoundException("User with id: " + id + " did`nt found");
+        }
+
+    }
+
+    public String changeUser(int id, String login, String password) {
+        Optional<User> userOptional = userRepository.findById(id);
+        if (userOptional.isPresent()){
+            userOptional.get().setLogin(login);
+            userOptional.get().setPassword(password);
+            return userOptional.get().toString();
+        }  else {
+            throw new UserNotFoundException("User with id: " + id + " did`nt found");
+        }
+    }
+
+    public String changeUser(int id, User user){
+        Optional<User> userOptional = userRepository.findById(id);
+        if (userOptional.isPresent()){
+            userOptional.get().setName(user.getName());
+            userOptional.get().setLastname(user.getLastname());
+            userOptional.get().setAge(user.getAge());
+            userOptional.get().setLogin(user.getLogin());
+            userOptional.get().setPassword(user.getPassword());
+            return userOptional.get().toString();
+        }  else {
+            throw new UserNotFoundException("User with id: " + id + " did`nt found");
+        }
     }
 }
 /*if (BCrypt.checkpw(password, hashedPassword)) {

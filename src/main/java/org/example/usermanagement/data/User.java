@@ -32,4 +32,7 @@ public class User {
     @Column(name = "password", nullable = false)
     private String password;
 
+    @Column(name = "`delete`", nullable = false)
+    private Boolean delete = false;
+
 }

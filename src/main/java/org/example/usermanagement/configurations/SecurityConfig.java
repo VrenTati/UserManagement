@@ -1,3 +1,4 @@
+/*
 package org.example.usermanagement.configurations;
 
 import org.springframework.context.annotation.Bean;
@@ -19,6 +20,9 @@ public class SecurityConfig {    @Bean
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/add_user").permitAll()
+                        .requestMatchers("/all_users").permitAll()
+                        .requestMatchers("/user/{id}").permitAll()
+                        .requestMatchers("/delete_user/{id}").permitAll()
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
@@ -27,3 +31,4 @@ public class SecurityConfig {    @Bean
     }
 
 }
+*/
