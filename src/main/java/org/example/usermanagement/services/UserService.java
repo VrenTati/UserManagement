@@ -58,6 +58,20 @@ public class UserService {
             throw new UserNotFoundException("User with id: " + id + " did`nt found");
         }
     }
+
+    public String changeUser(int id, User user){
+        Optional<User> userOptional = userRepository.findById(id);
+        if (userOptional.isPresent()){
+            userOptional.get().setName(user.getName());
+            userOptional.get().setLastname(user.getLastname());
+            userOptional.get().setAge(user.getAge());
+            userOptional.get().setLogin(user.getLogin());
+            userOptional.get().setPassword(user.getPassword());
+            return userOptional.get().toString();
+        }  else {
+            throw new UserNotFoundException("User with id: " + id + " did`nt found");
+        }
+    }
 }
 /*if (BCrypt.checkpw(password, hashedPassword)) {
             System.out.println("Пароль верный");

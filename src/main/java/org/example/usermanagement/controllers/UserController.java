@@ -50,9 +50,10 @@ public class UserController {
 
     @PutMapping("/change_user/{id}")
     public String changeUser(@PathVariable int id,
-                             @RequestParam String login,
-                             @RequestParam String password) {
+                             /*@RequestParam String login,
+                             @RequestParam String password*/
+    @RequestParam User user) {
 
-        return userService.changeUser(id, login, password);
+        return userService.changeUser(id, user);
     }
 }
